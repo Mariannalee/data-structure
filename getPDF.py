@@ -7,6 +7,8 @@ from dotenv import load_dotenv
 from fpdf import FPDF
 from google import genai
 import re
+import google.generativeai as genai
+import os
 
 # 載入環境變數並設定 API 金鑰
 load_dotenv()
@@ -70,9 +72,9 @@ def parse_markdown_table(markdown_text: str) -> pd.DataFrame:
     """
     從 Markdown 格式的表格文字提取資料，返回一個 pandas DataFrame。
     例如，輸入：
-      | start | end | text | 分類 |
+      |句子| 分類(文法/字彙) | 分級 | 備註|
       |-------|-----|------|------|
-      | 00:00 | 00:01 | 開始拍攝喔 | 備註 |
+      |  先生は私に本を読ませました。|N3文法：読ませました，N5字彙：読む| N3，N5 | 常用文法 |
     會返回包含該資料的 DataFrame。
     """
     lines = markdown_text.strip().splitlines()
@@ -178,17 +180,16 @@ def gradio_handler(csv_file, user_prompt):
 
 default_prompt = """請根據以下的規則將每句對話進行分類：
 
-"引導",
-"評估(口語、跟讀的內容有關)",
-"評估(非口語、寶寶自發性動作、跟讀的內容有關)",
-"延伸討論",
-"複述",
-"開放式問題",
-"填空",
-"回想",
-"人事時地物問句",
-"連結生活經驗",
-"備註"
+"日文 N1 語言能力測驗中的字彙"
+"日文 N2 語言能力測驗中的字彙"
+"日文 N3 語言能力測驗中的字彙"
+"日文 N4 語言能力測驗中的字彙"
+"日文 N5 語言能力測驗中的字彙"
+"日文 N1 語言能力測驗中的文法"
+"日文 N2 語言能力測驗中的文法"
+"日文 N3 語言能力測驗中的文法"
+"日文 N4 語言能力測驗中的文法"
+"日文 N5 語言能力測驗中的文法"
 
 並將所有類別進行統計後產出報表。"""
 

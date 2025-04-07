@@ -17,6 +17,7 @@ genai.configure(api_key=api_key)
 # 建立模型
 model = genai.GenerativeModel(model_name="gemini-1.5-flash")
 
+#HW2
 # 評分項目（僅字彙）
 ITEMS = [
     "日文檢定N1字彙",
